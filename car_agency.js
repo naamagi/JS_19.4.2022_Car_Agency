@@ -859,10 +859,61 @@ console.log(getCustomersCars(carMarket));
 //? @param {object} - carObject
 //? @return {}
 
+const setNewCarToAgency = (carMarket, id, carObject) => {
+  carMarket.sellers.forEach((seller) => {
+    if (seller.agencyId === id) {
+      seller.cars.forEach((carBrand) => {
+        if (carBrand.brand === carObject.brand) {
+          carBrand.models.push(carObject);
+        }
+      });
+    }
+  });
+};
+
+console.log(
+  `***********************setNewCarToAgency:*************************`
+);
+const carObj = {
+  name: "Cyber Truck",
+  year: 2020,
+  price: 966500,
+  carNumber: "S6Dtr",
+  ownerId: "Plyq5M5AZ",
+  brand: "bmw",
+};
+
+setNewCarToAgency(carMarket, "Plyq5M5AZ", carObj);
+console.log(getAllCarToBuyByAgencyId(carMarket, "Plyq5M5AZ"));
+
 //* deleteCarFromAgency
 //? @param {string} - id of agency
 //? @param {string} -  Car id
 // ? @return {}
+
+const deleteCarFromAgency = (carMarket, agencyId, carId) => {
+  // const carsOfAgency=getAllCarToBuyByAgencyId(carMarket, agencyId);
+  let requiredSeller = carMarket.sellers.find((seller) => {
+    seller.agencyId === agencyId;
+  });
+  if (requiredSeller) {
+    requiredSeller.cars.forEach((carBrand) => {
+      carBrand.models.forEach((model, modelIndex, modelArray) => {
+        if (model.carNumber === carId) {
+          modelArray.splice(modelIndex, 1);
+        }
+      });
+    });
+  }
+
+  //  carsOfAgency.find(car=>car.carNumber===carId);
+  // requiredCar=undefined;
+};
+console.log(
+  `***********************deleteCarFromAgency:*************************`
+);
+deleteCarFromAgency(carMarket, "Plyq5M5AZ", "MWXBG"); //Hilux (toyota)
+console.log(getAllCarToBuyByAgencyId(carMarket, "Plyq5M5AZ"));
 
 //* decrementOrIncrementCashOfAgency
 //? @param {string} - agencyId
