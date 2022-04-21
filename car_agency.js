@@ -920,15 +920,38 @@ console.log(getAllCarToBuyByAgencyId(carMarket, "Plyq5M5AZ"));
 //? @param {number} - amount - negative or positive amount
 // ? @return {number} - agencyCash
 
+const decrementOrIncrementCashOfAgency=(carMarket,agencyId,amount) => {
+const agency=carMarket.sellers.find(seller=>seller.agencyId===agencyId);
+return agency?agency.cash+=amount:undefined;
+}
+
+
+
+
+
 //* decrementOrIncrementCreditOfAgency
 //? @param {string} - agencyId
 //? @param {number} - amount - negative or positive amount
 // ? @return {number} - agencyCash
 
+const decrementOrIncrementCreditOfAgency=(carMarket,agencyId,amount) => {
+  const agency=carMarket.sellers.find(seller=>seller.agencyId===agencyId);
+  return agency?agency.credit+=amount:undefined;
+  }
+
+
+
+
+
 //* setAmountOfCarsToBuyToAllAgency's
 //? set a new property amountOfCars to all agency's, that represent the amount of cars available in the agency.
 //? @param {}
 // ? @return {objects[]} - sellers - array of all agency's
+
+const setAmountOfCarsToBuyToAllAgencies=(carMarket) => {
+  carMarket.sellers.forEach(seller=>seller.amountOfCars=getAllCarToBuyByAgencyId(carMarket, seller.agencyId).length);
+  return carMarket.sellers;
+}
 
 //todo setters
 //* setCarToCostumer
@@ -936,15 +959,38 @@ console.log(getAllCarToBuyByAgencyId(carMarket, "Plyq5M5AZ"));
 //? @param {object} - carObject
 //? @return {object[]} - allCarsOfCostumer
 
+const setCarToCostumer=(carMarket,customerId,carObject)=>{
+  const customerObj=carMarket.customers.find(customer=>customer.id===customerId);
+  if(customerObj) {
+    customerObj.cars.push(carObject);
+    return  customerObj.cars;
+  }
+}
+
 //* deleteCarOfCostumer
 //? @param {string} - costumerId
 //? @param {string} - carId
 //? @return {object[]} - allCarsOfCostumer
 
+const deleteCarOfCostumer=(carMarket,customerId,carId)=>{
+  const customerObj=carMarket.customers.find(customer=>customer.id===customerId);
+  if(customerObj) {
+    customerObj.cars.forEach((car,index,arr)=>{if(car.carNumber===carId){arr.splice(index,1)}});
+    return  customerObj.cars;
+  }
+}
+
+
 //* decrementOrIncrementCashOfCostumer
 //? @param {string} - costumerId
 //? @param {number} - amount - negative or positive amount
 // ? @return {number} - costumerCash
+
+
+const decrementOrIncrementCashOfCostumer=(carMarket,costumerId,amount) => {
+  const customer=carMarket.customers.find(customer=>customer.id===costumerId);
+  return customer?customer.cash+=amount:undefined;
+  }
 
 //! -------------------------------------------------------
 //* 2) sortAndFilterByYearOfProduction
