@@ -892,10 +892,10 @@ console.log(getAllCarToBuyByAgencyId(carMarket, "Plyq5M5AZ"));
 // ? @return {}
 
 const deleteCarFromAgency = (carMarket, agencyId, carId) => {
-  // const carsOfAgency=getAllCarToBuyByAgencyId(carMarket, agencyId);
   let requiredSeller = carMarket.sellers.find((seller) => {
-    seller.agencyId === agencyId;
+    return seller.agencyId === agencyId;
   });
+  console.log("requiredSeller:" + requiredSeller);
   if (requiredSeller) {
     requiredSeller.cars.forEach((carBrand) => {
       carBrand.models.forEach((model, modelIndex, modelArray) => {
@@ -905,14 +905,11 @@ const deleteCarFromAgency = (carMarket, agencyId, carId) => {
       });
     });
   }
-
-  //  carsOfAgency.find(car=>car.carNumber===carId);
-  // requiredCar=undefined;
 };
 console.log(
   `***********************deleteCarFromAgency:*************************`
 );
-deleteCarFromAgency(carMarket, "Plyq5M5AZ", "MWXBG"); //Hilux (toyota)
+deleteCarFromAgency(carMarket, "Plyq5M5AZ", "2kjy7");
 console.log(getAllCarToBuyByAgencyId(carMarket, "Plyq5M5AZ"));
 
 //* decrementOrIncrementCashOfAgency
@@ -920,38 +917,53 @@ console.log(getAllCarToBuyByAgencyId(carMarket, "Plyq5M5AZ"));
 //? @param {number} - amount - negative or positive amount
 // ? @return {number} - agencyCash
 
-const decrementOrIncrementCashOfAgency=(carMarket,agencyId,amount) => {
-const agency=carMarket.sellers.find(seller=>seller.agencyId===agencyId);
-return agency?agency.cash+=amount:undefined;
-}
+const decrementOrIncrementCashOfAgency = (carMarket, agencyId, amount) => {
+  const agency = carMarket.sellers.find(
+    (seller) => seller.agencyId === agencyId
+  );
+  return agency ? (agency.cash += amount) : undefined;
+};
 
-
-
-
+console.log(
+  `***********************decrementOrIncrementCashOfAgency:*************************`
+);
+console.log(decrementOrIncrementCashOfAgency(carMarket, "Plyq5M5AZ", -5000));
 
 //* decrementOrIncrementCreditOfAgency
 //? @param {string} - agencyId
 //? @param {number} - amount - negative or positive amount
 // ? @return {number} - agencyCash
 
-const decrementOrIncrementCreditOfAgency=(carMarket,agencyId,amount) => {
-  const agency=carMarket.sellers.find(seller=>seller.agencyId===agencyId);
-  return agency?agency.credit+=amount:undefined;
-  }
-
-
-
-
+const decrementOrIncrementCreditOfAgency = (carMarket, agencyId, amount) => {
+  const agency = carMarket.sellers.find(
+    (seller) => seller.agencyId === agencyId
+  );
+  return agency ? (agency.credit += amount) : undefined;
+};
+console.log(
+  `***********************decrementOrIncrementCreditOfAgency:*************************`
+);
+console.log(decrementOrIncrementCreditOfAgency(carMarket, "Plyq5M5AZ", 4000));
 
 //* setAmountOfCarsToBuyToAllAgency's
 //? set a new property amountOfCars to all agency's, that represent the amount of cars available in the agency.
 //? @param {}
 // ? @return {objects[]} - sellers - array of all agency's
 
-const setAmountOfCarsToBuyToAllAgencies=(carMarket) => {
-  carMarket.sellers.forEach(seller=>seller.amountOfCars=getAllCarToBuyByAgencyId(carMarket, seller.agencyId).length);
+const setAmountOfCarsToBuyToAllAgencies = (carMarket) => {
+  carMarket.sellers.forEach(
+    (seller) =>
+      (seller.amountOfCars = getAllCarToBuyByAgencyId(
+        carMarket,
+        seller.agencyId
+      ).length)
+  );
   return carMarket.sellers;
-}
+};
+console.log(
+  `***********************setAmountOfCarsToBuyToAllAgencies:*************************`
+);
+console.log(setAmountOfCarsToBuyToAllAgencies(carMarket));
 
 //todo setters
 //* setCarToCostumer
@@ -959,26 +971,53 @@ const setAmountOfCarsToBuyToAllAgencies=(carMarket) => {
 //? @param {object} - carObject
 //? @return {object[]} - allCarsOfCostumer
 
-const setCarToCostumer=(carMarket,customerId,carObject)=>{
-  const customerObj=carMarket.customers.find(customer=>customer.id===customerId);
-  if(customerObj) {
+const setCarToCostumer = (carMarket, customerId, carObject) => {
+  const customerObj = carMarket.customers.find(
+    (customer) => customer.id === customerId
+  );
+  if (customerObj) {
     customerObj.cars.push(carObject);
-    return  customerObj.cars;
+    return customerObj.cars;
   }
-}
+};
+console.log(
+  `***********************setCarToCostumer:*************************`
+);
+const carToAddToCustomer = {
+  name: "EHS-9",
+  year: 2020,
+  price: 22250,
+  carNumber: "xoxox",
+  ownerId: "2RprZ1dbL",
+  brand: "HONGQI"
+};
+console.log(setCarToCostumer(carMarket, "2RprZ1dbL", carToAddToCustomer));
 
 //* deleteCarOfCostumer
 //? @param {string} - costumerId
 //? @param {string} - carId
 //? @return {object[]} - allCarsOfCostumer
 
-const deleteCarOfCostumer=(carMarket,customerId,carId)=>{
-  const customerObj=carMarket.customers.find(customer=>customer.id===customerId);
-  if(customerObj) {
-    customerObj.cars.forEach((car,index,arr)=>{if(car.carNumber===carId){arr.splice(index,1)}});
-    return  customerObj.cars;
+
+const deleteCarOfCostumer = (carMarket, customerId, carId) => {
+  const customerObj = carMarket.customers.find(
+    (customer) => customer.id === customerId
+  );
+  if (customerObj) {
+    customerObj.cars.forEach((car, index, arr) => {
+      if (car.carNumber === carId) {
+        arr.splice(index, 1);
+      }
+    });
+    return customerObj.cars;
   }
-}
+};
+
+console.log(
+  `***********************deleteCarOfCostumer:*************************`
+);
+console.log(deleteCarOfCostumer(carMarket, "pAuFtn_WA", "2WU_y"));
+console.log(deleteCarOfCostumer(carMarket, "cnTobUDy6", "Xxcy_"));
 
 
 //* decrementOrIncrementCashOfCostumer
@@ -986,11 +1025,17 @@ const deleteCarOfCostumer=(carMarket,customerId,carId)=>{
 //? @param {number} - amount - negative or positive amount
 // ? @return {number} - costumerCash
 
+const decrementOrIncrementCashOfCostumer = (carMarket, costumerId, amount) => {
+  const customer = carMarket.customers.find(
+    (customer) => customer.id === costumerId
+  );
+  return customer ? (customer.cash += amount) : undefined;
+};
 
-const decrementOrIncrementCashOfCostumer=(carMarket,costumerId,amount) => {
-  const customer=carMarket.customers.find(customer=>customer.id===costumerId);
-  return customer?customer.cash+=amount:undefined;
-  }
+console.log(
+  `***********************decrementOrIncrementCashOfCostumer:*************************`
+);
+console.log(decrementOrIncrementCashOfCostumer(carMarket, "pAuFtn_WA", 2000));
 
 //! -------------------------------------------------------
 //* 2) sortAndFilterByYearOfProduction
